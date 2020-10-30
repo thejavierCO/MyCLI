@@ -2,11 +2,12 @@ let path = require("path");
 let cmd = require("execa");
 let commands = require("commands");
 let inquirer = require("inquirer");
-let {dirExists:existdir} = require("dir-exists-safe");
 
 let file = require("file-maker");
+let fileExist = require("file-exists");
 
 let setDir = require("make-dir");
+let {dirExists:existdir} = require("dir-exists-safe");
 
 let home = path.resolve("f:","Projects");
 
@@ -38,11 +39,14 @@ let getDirectory = async (dir,message,invert=false)=>existdir(dir)
 let createDir = async (e)=>e?setDir(e):false;
 
 let run = async (a)=>{
-    let test = await cmd.command("node",["init","-y"],{
-        stdio:"inherit",
-        cwd:a
-    });
-    console.log(test)
+    if(!fileExist.sync(path.join(a,"package.json"))){
+        await cmd.command("npm init -y",{
+            stdio:"inherit",
+            cwd:a
+        });
+    }
+    getDirectory(path.join(a,"src"),"not exist source directory \n your create?");
+    await cmd.command("code "+a);
 }
 
 if(typeof commands.get("new") !== "string"){
@@ -68,7 +72,7 @@ if(typeof commands.get("new") !== "string"){
                 console.log("require name proyect");
                 return a;
             })(false):true
-        }]).then(({project})=>setCapitaleDirectory(dir,project))
+        }]).then(({project})=>path.join(dir,project))
     ).then(e=>getDirectory(e,"exist directory continue",true))
     .then(e=>run(e))
     .catch(e=>{
@@ -89,7 +93,7 @@ if(typeof commands.get("new") !== "string"){
                 return a;
             })(false):true
         }])
-        .then(({project})=>setCapitaleDirectory(dir,project))
+        .then(({project})=>path.join(dir,project))
         .then(e=>getDirectory(e,"exist directory continue",true))
         .then(e=>run(e))
         .catch(e=>{
