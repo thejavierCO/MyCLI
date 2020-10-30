@@ -1,0 +1,23 @@
+{
+  "name": "my_cli",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./src/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "commands": "0.0.7",
+    "cross-spawn": "^7.0.3",
+    "dir-exists-safe": "^1.0.1",
+    "execa": "^4.1.0",
+    "file-maker": "^1.0.3",
+    "inquirer": "^7.3.3",
+    "make-dir": "^3.1.0",
+    "spawn-command": "0.0.2-1"
+  },
+  "devDependencies": {},
+  "description": ""
+}
