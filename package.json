@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@zhangfuxing/movedir": "^1.0.2",
     "commands": "0.0.7",
     "cross-spawn": "^7.0.3",
     "dir-exists-safe": "^1.0.1",
