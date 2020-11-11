@@ -38,7 +38,7 @@ class Directorys{
             directoryName = directoryMove;
             directoryMove = path.resolve(directoryMove);
             if(dirExistsSync(directoryMove)){
-                return fsa.copy(directoryMove,path.resolve(directoryAdd,directoryName)).then(e=>true).catch(e=>{throw false})
+                return fsa.copy(directoryMove,path.resolve(directoryAdd,directoryName)).then(_=>path.resolve(directoryAdd,directoryName)).catch(e=>{throw false})
             }else throw "not exist direcctory "+directoryMove;
         }else throw "not exist direcctory "+directoryName;
     }

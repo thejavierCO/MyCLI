@@ -1,14 +1,53 @@
-const commands     = require("commands");
-const inquirer     = require("inquirer");
+const cmd = require("execa");
+const inquirer = require("inquirer");
+
+const arguments = require("./tools/setArguments");
 const setDirectory = require("./tools/setDirectory");
 let directory = new setDirectory();
-
+let data = new arguments();
 directory.set("CMD");
 directory.set("Proyects");
 
-let add = commands.get("add")
-if(add !== ""){
-    directory.add("CMD",add)
-    .then(e=>console.log(e))
-    .catch(e=>console.log(e))
-}
+data.get(["new","name"])
+.then(e=>e.filter(e=>typeof e.data === "string"||typeof e.data === "boolean"))
+.then(e=>e.map(e=>({[e.name]:e.data,tag:e.name})))
+.then(e=>{
+    let newP = e[0].new;
+    let nameP = e[0].name;
+    if(typeof newP === "string"){
+        
+    }else{
+    }
+})
+
+// data.get("add")
+// .then(e=>{
+//     console.log(e);
+//     return e;
+// })
+// .then(e=>e.exists===true?inquirer.prompt({
+//     type:"confirm",
+//     name:"realyAdd",
+//     message:"agregar?"
+// }):false)
+// .then(e=>{
+//     console.log(e)
+// })
+
+// let add = commands.get("add")
+// if(commands.exists("add")){
+    // inquirer.prompt({
+    //     type:"confirm",
+    //     name:"realyAdd",
+    //     message:"agregar?"
+    // })
+    // .then(({realyAdd})=>realyAdd?directory.add("CMD",add):false)
+    // .then(e=>{
+    //     // let {path} = process.env;
+    //     // let add = path.split(";");
+    //     // add.push(e)
+    //     // console.log(add.join(";"))
+    //     // return cmd('SETX /M epath "%Path%;'+e+';"',{stdout:"inherit"})
+    // })
+    // .catch(e=>console.log(e))
+// }
