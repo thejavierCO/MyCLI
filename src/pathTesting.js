@@ -1,24 +1,22 @@
-const cmd = require("execa");
-const inquirer = require("inquirer");
-
 const arguments = require("./tools/setArguments");
 const setDirectory = require("./tools/setDirectory");
+
 let directory = new setDirectory();
 let data = new arguments();
-directory.set("CMD");
+
+// directory.set("CMD");
 directory.set("Proyects");
 
 data.get(["new","name"])
 .then(e=>e.filter(e=>typeof e.data === "string"||typeof e.data === "boolean"))
 .then(e=>e.map(e=>({[e.name]:e.data,tag:e.name})))
 .then(e=>{
-    let newP = e[0].new;
-    let nameP = e[0].name;
-    if(typeof newP === "string"){
-        
-    }else{
-    }
+    let {0:{new:setTP},1:{name:setNP}} = e;
+    
 })
+// .then(e=>({
+//     [e[0].new]:
+// }))
 
 // data.get("add")
 // .then(e=>{

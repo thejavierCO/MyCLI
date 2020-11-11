@@ -1,6 +1,6 @@
 const cmd = require("execa");
 
-module.exports = class{
+module.exports = class nodeProyect{
     constructor(root){
         this.root = root;
     }
