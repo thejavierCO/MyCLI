@@ -1,4 +1,5 @@
 const path = require("path");
+const fsa = require("fs-extra")
 const makeDir = require("make-dir");
 const {dirExists,dirExistsSync} = require("dir-exists-safe");
 
@@ -17,8 +18,7 @@ class Directorys{
                 console.log("create tools")
             }
         }else{
-            const {USERPROFILE} = process.env;
-            directory = path.join(USERPROFILE,"tools");
+            directory = path.join("f:","tools");
         }
         this.root = directory;
     }
@@ -31,6 +31,16 @@ class Directorys{
         let directoryGet = path.join(this.root,name);
         if(!dirExistsSync(directoryGet))throw "not exist "+directoryGet;
         return directoryGet;
+    }
+    async add(directoryName="",directoryMove=""){
+        let directoryAdd = path.resolve(this.root,directoryName);
+        if(dirExistsSync(directoryAdd)){
+            directoryName = directoryMove;
+            directoryMove = path.resolve(directoryMove);
+            if(dirExistsSync(directoryMove)){
+                return fsa.copy(directoryMove,path.resolve(directoryAdd,directoryName)).then(e=>true).catch(e=>{throw false})
+            }else throw "not exist direcctory "+directoryMove;
+        }else throw "not exist direcctory "+directoryName;
     }
 }
 
