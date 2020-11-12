@@ -1,6 +1,7 @@
 const path = require("path");
+const fs = require("fs");
 const fse = require("fs-extra");
-const {dirExistsSync} = require("dir-exists-safe")
+const dirExistsSync = fse.pathExistsSync;
 const dirMake = require("make-dir")
 
 class DirectoryManager{
@@ -43,6 +44,15 @@ class DirectoryManager{
         if(dirExistsSync(raiz)){
             // fse.moveSync(raiz,path.resolve(this.root,type));
             return true;
+        }else{
+            console.log("not exist directory",raiz);
+            return false;
+        }
+    }
+    readDirectory(){
+        let raiz = path.resolve(this.root,a)
+        if(dirExistsSync(raiz)){
+            return fs.readdirSync(raiz);
         }else{
             console.log("not exist directory",raiz);
             return false;

@@ -97,7 +97,8 @@ class Projects extends Directory{
         let result = {};
         let directory = path.resolve(ruta,name);
         if(pathExistsSync(directory)){
-            result.path = removeSync(directory);
+            removeSync(directory)
+            result.path = directory;
             result.status = true;
         }else{
             result.path = directory;
