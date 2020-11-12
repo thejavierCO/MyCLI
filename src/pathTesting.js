@@ -3,4 +3,4 @@ let PT = new Directory("F:/tools")
 
 let workdirectory = PT.setTypeProject();
 
-console.log(workdirectory.addProyect("testing"))
+console.log(workdirectory.getProjects())

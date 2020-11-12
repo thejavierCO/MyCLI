@@ -42,10 +42,13 @@ class Projects extends Directory{
         try {
             let directory = this.getTypeProject(type)
             if(directory.error)throw directory
-            return this.delDirectory(directory);
+            this.delDirectory(directory);
+            return true;
         } catch (err) {
             if(err.error){
-                throw err
+                return false;
+            }else{
+                console.log(err)
             }
         }
     }
@@ -60,28 +63,67 @@ class Projects extends Directory{
                 name:nameProyect
             })),
             delProject:(name)=>this.delProject(name,a),
-            moveProject:(name)=>this.moveProject(name,a)
+            moveProject:(name,move)=>this.moveProject(name,a,move),
+            root:a
         }
 
     }
-    async addProject(name="testing",ruta=this.root){
+    async addProject(name="testing",ruta=this.getTypeProject().root){
         let result = {};
         let directory = path.resolve(ruta,name);
         if(!pathExistsSync(directory)){
             result.path = makeDir.sync(directory);
+            result.status = "make";
         }else{
             result.path = directory;
+            result.status = "exist";
         }
         return result;
     }
-    async getProject(name="testing",type="default"){
-        console.log(name,ruta)
+    async getProject(name="testing",ruta=this.getTypeProject().root){
+        let result = {};
+        let directory = path.resolve(ruta,name);
+        if(pathExistsSync(directory)){
+            result.path = directory;
+            result.status = "exist";
+        }else{
+            result.path = directory;
+            result.status = "not exist";
+            throw result;
+        }
+        return result;
     }
-    async delProject(name="testing",type="default"){
-        console.log(name,ruta)
+    async delProject(name="testing",ruta=this.getTypeProject().root){
+        let result = {};
+        let directory = path.resolve(ruta,name);
+        if(pathExistsSync(directory)){
+            result.path = removeSync(directory);
+            result.status = true;
+        }else{
+            result.path = directory;
+            result.status = "not exist";
+            throw result;
+        }
+        return result;
     }
-    async moveProject(nameProject="testing",moveToType="default"){
-        console.log(name,ruta)
+    async moveProject(name="testing",ruta=this.getTypeProject().root,moveRuta=this.getTypeProject().root){
+        let result = {};
+        let directory = path.resolve(ruta,name);
+        if(pathExistsSync(directory)){
+            if(!pathExistsSync(moveRuta)){
+                result.path = moveRuta;
+                result.status = "not exist root to move";
+                throw result;
+            }else{
+                result.path = moveSync(directory,moveRuta);
+                result.status = true;
+            }
+        }else{
+            result.path = directory;
+            result.status = "not exist";
+            throw result;
+        }
+        return result;
     }
 }
 
