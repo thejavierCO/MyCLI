@@ -1,0 +1,29 @@
+{
+  "name": "my_cli",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build": "f:/cmd/node ./node_modules/nexe ./src/index.js",
+    "test": "f:/cmd/node ./node_modules/nexe ./src/pathTesting.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.21.0",
+    "commands": "0.0.7",
+    "cross-spawn": "^7.0.3",
+    "dir-exists-safe": "^1.0.1",
+    "execa": "^4.1.0",
+    "file-exists": "^5.0.1",
+    "file-maker": "^1.0.3",
+    "fs-extra": "^9.0.1",
+    "inquirer": "^7.3.3",
+    "make-dir": "^3.1.0",
+    "spawn-command": "0.0.2-1"
+  },
+  "devDependencies": {
+    "nexe": "^3.3.7"
+  },
+  "description": ""
+}
