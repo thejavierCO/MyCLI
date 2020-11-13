@@ -5,4 +5,4 @@ let PT = new Directory("f:/tools");
 
 let workdirectory = PT.Type.set("svelte");
 
-console.log(workdirectory.new("testing"),8)
+console.log(new Node(workdirectory.new("testing")),8)
