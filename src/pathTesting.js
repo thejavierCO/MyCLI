@@ -1,10 +1,6 @@
-const Directory = require("./tools/ProyectManager")
-let PT = new Directory("F:/tools")
+const Directory = require("./tools/DirectoryManager")
+let PT = new Directory("f:/tools")
 
-let workdirectory = PT.setTypeProject();
+let workdirectory = PT.getDirectory("Projects");
 
-console.log(workdirectory.addProyect())
-console.log(workdirectory.addProyect("svelte"))
-console.log(workdirectory.addProyect("react"))
-
-console.log(workdirectory)
+console.log(workdirectory.readDirectory())
