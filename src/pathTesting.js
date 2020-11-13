@@ -1,6 +1,8 @@
-const Directory = require("./tools/DirectoryManager")
-let PT = new Directory("f:/tools")
+const Directory = require("./tools/ProyectManager");
+const Node = require("./tools/NodeManager");
 
-let workdirectory = PT.getDirectory("Projects");
+let PT = new Directory("f:/tools");
 
-console.log(workdirectory.readDirectory())
+let workdirectory = PT.Type.set("svelte");
+
+console.log(workdirectory.new("testing"),8)
