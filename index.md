@@ -1,3 +1,3 @@
 # Estado del proyecto
 ## elementos agregados
-- [X] systema de manejo de directorios
+- [X] Systema de manejo de directorios
