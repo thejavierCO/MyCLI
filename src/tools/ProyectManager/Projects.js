@@ -1,5 +1,9 @@
+const Git = require("../GitManager");
+const Node = require("../NodeManager");
+const execa = require("execa");
 const path = require("path");
 const fse = require("fs-extra");
+
 
 class ProjectInit{
     constructor(dir,type,name){
@@ -9,6 +13,9 @@ class ProjectInit{
         this.type = type;
         if(!name)throw "not exist name"
         this.name = name;
+	this.Node = new Node(this);
+	this.Git = new Git(this);
+	this.Run = (a)=>execa.sync(a,{stdout:"inherit",cwd:this.dir.root})
     }
 }
 
@@ -29,14 +36,14 @@ class Project{
     }
     get = (nameProject="default")=>{
         if(!fse.pathExistsSync(path.resolve(this.directory.root,nameProject))){
-            throw {error:"not exist proyect"}
+            throw {error:"not exist proyect",name:nameProject}
         }else{
             return new ProjectInit(this.directory.getDirectory(nameProject),this.type,nameProject);
         }
     }
     del = (nameProject="default")=>{
         if(!fse.pathExistsSync(path.resolve(this.directory.root,nameProject))){
-            throw {error:"not exist proyect"}
+            throw {error:"not exist proyect",name:nameProyect}
         }else{
             return this.directory.delDirectory(nameProject)
         }

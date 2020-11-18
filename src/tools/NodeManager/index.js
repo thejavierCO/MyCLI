@@ -5,7 +5,8 @@ const execa = require("execa");
 class NodeManager{
     constructor(projectManager){
         this.project = projectManager;
-        this.init = async ()=>await execa("npm init -y",{stdout:"inherit",cwd:this.project.dir.root})
+        this.get = ()=>fs.existsSync(path.resolve(this.project.dir.root,"package.json"))
+	this.Start = async ()=>await execa("npm init -y",{stdout:"inherit",cwd:this.project.dir.root}).then(e=>{this.init = true;return e})
         this.getModules = async (modules,isdev)=>{
             let dev = isdev?" -D":" ";
             if(fs.existsSync(path.resolve(this.project.dir.root,"package.json"))){
@@ -16,6 +17,7 @@ class NodeManager{
                 throw {error:"not set package.json",path:this.project.dir.root}
             }
         }
+	this.init = this.get();
     }
 }
 
