@@ -2,6 +2,7 @@ const questManager = require("./tools/questManager");
 
 let PT = new questManager("f:/tools")
 
+/*
 PT.Quest(
     {
         type:"confirm",
@@ -117,4 +118,4 @@ PT.Quest(
 	}else{
 		console.log(e,"other error")
 	}
-});
+});*/
