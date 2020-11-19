@@ -7,11 +7,11 @@ async (a)=>{
     console.log(a)
     return 0;
 },
-(a)=>{
+function(a){
     console.log(a)
     return a+1;//0+1;
 },
-(a)=>{
+async function(a){
     a++;
     return a;//1;
 },

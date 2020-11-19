@@ -54,7 +54,8 @@ class cli{
 					await this.getResultPromise(element,data,(a)=>rdata = a)
 					continue;
 				}else{
-					rdata = element(rdata)
+					rdata = element(rdata);
+					continue;
 				}
 			}
 			return rdata;
