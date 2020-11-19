@@ -56,36 +56,15 @@ class cli{
 				Quest:quest
 			}
 			for (const element of fs) {
-				if(/(async)/i.test(element.toString())){
-					await this.getResultPromise(
-						element,
-						typeof rdata.data === "undefined"?data:rdata,
-						(a)=>{
-							console.log(a)
-							rdata.data = a
-						}
-					)
-					continue;
-				}else{
-					rdata.data = element(typeof rdata.data === "undefined"?data:rdata);
-					try{
-						if(typeof rdata.data === "object"&&typeof rdata.data.WorkDirectory === "object"){
-							rdata.Quest = rdata.data;
-							rdata.data = {};
-						}
-					}catch(err){
-						if(/(WorkDirectory)/.test(err.message)){
-							continue;
-						}
-						console.log(err);
-					}
-					continue;
-				}
+				console.log(this.isPromise(element))
 			}
 			return rdata;
 		}else{
 			throw {error:"require array"}
 		}
+	}
+	isPromise(element){
+		return /(async)|(promise)/.test(element)
 	}
 	async getResultPromise(fs,arg,f){
 		let returnData = true;
