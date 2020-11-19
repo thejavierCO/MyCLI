@@ -37,8 +37,37 @@ class cli{
 		}
 	}
 	run(){
-		console.log(this.events.filter(({name})=>this.cmd.exist(name)))
-		return this;
+		let getfisrtEvent = this.events.filter(({name})=>this.cmd.exist(name))
+		if(getfisrtEvent.length>0){
+			let {name,fs} = getfisrtEvent[0];
+			let data = this.cmd.get(name);
+			return this.runFs(fs,data);
+		}else{
+			throw {error:"no se ejecuto ninguna sentancia"}
+		}
+	}
+	async runFs(fs,data){
+		if(typeof fs === "object"&&fs.length>0){
+			let rdata;
+			for (const element of fs) {
+				if(/(async)/i.test(element.toString())){
+					await this.getResultPromise(element,data,(a)=>rdata = a)
+					continue;
+				}else{
+					rdata = element(rdata)
+				}
+			}
+			return rdata;
+		}else{
+			throw {error:"require array"}
+		}
+	}
+	async getResultPromise(fs,arg,f){
+		let returnData = true;
+		while(returnData === true){
+			returnData = await fs(arg)
+		}
+		return typeof f === "function"?f(returnData):returnData
 	}
 }
 

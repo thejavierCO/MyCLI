@@ -23,7 +23,6 @@ PT.Quest(
 		return PT.WorkDirectory.Type.get(a.type);
 	}catch(err){
 		if(err.error){
-			//PT.WorkDirectory.Type.set(a.type);
 			return PT.Quest(
 				{
 					type:"confirm",
@@ -38,7 +37,6 @@ PT.Quest(
 					:((a)=>{throw {error:"se cancelo la creacion del directrio"}})(err)
 			)
 		}else{
-			//console.log(err,"what error?")
 			throw err
 		}
 	}

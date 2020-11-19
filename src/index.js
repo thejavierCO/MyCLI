@@ -3,17 +3,20 @@ const cli = require("./tools/cliCommands");
 let MyCli = new cli((a)=>"play");
 
 MyCli.on("new",
-(a)=>{
+async (a)=>{
+    console.log(a)
     return 0;
 },
-async (a)=>{
+(a)=>{
+    console.log(a)
     return a+1;//0+1;
 },
-async (a)=>{
-    console.log(a,"promise");
-    // console.log(a,{id:2});
+(a)=>{
+    a++;
     return a;//1;
 },
 )
 
-MyCli.run()
+MyCli.run().then(e=>{
+    console.log(e)
+})
