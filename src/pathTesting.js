@@ -2,9 +2,8 @@ const questManager = require("./tools/questManager");
 
 let PT = new questManager("f:/tools")
 
-/*
 PT.Quest(
-    {
+   {
         type:"confirm",
         name:"new",
         message:"Seguro que quiere crear un proyecto",
@@ -118,4 +117,4 @@ PT.Quest(
 	}else{
 		console.log(e,"other error")
 	}
-});*/
+});
