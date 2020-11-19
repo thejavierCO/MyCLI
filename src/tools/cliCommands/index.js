@@ -1,6 +1,6 @@
-const path = require("path");
 const PT = require("../questManager");
 const commands = require("commands");
+const quest = require("../questManager");
 
 class command{
 	constructor(){
@@ -36,25 +36,49 @@ class cli{
 			this.events.push(data)
 		}
 	}
-	run(){
+	async run(){
 		let getfisrtEvent = this.events.filter(({name})=>this.cmd.exist(name))
 		if(getfisrtEvent.length>0){
 			let {name,fs} = getfisrtEvent[0];
 			let data = this.cmd.get(name);
-			return this.runFs(fs,data);
+			return await this.runFs(fs,{
+				data,
+				Quest:PT
+			});
 		}else{
 			throw {error:"no se ejecuto ninguna sentancia"}
 		}
 	}
 	async runFs(fs,data){
 		if(typeof fs === "object"&&fs.length>0){
-			let rdata;
+			let rdata = {
+				data:undefined,
+				Quest:quest
+			}
 			for (const element of fs) {
 				if(/(async)/i.test(element.toString())){
-					await this.getResultPromise(element,data,(a)=>rdata = a)
+					await this.getResultPromise(
+						element,
+						typeof rdata.data === "undefined"?data:rdata,
+						(a)=>{
+							console.log(a)
+							rdata.data = a
+						}
+					)
 					continue;
 				}else{
-					rdata = element(rdata);
+					rdata.data = element(typeof rdata.data === "undefined"?data:rdata);
+					try{
+						if(typeof rdata.data === "object"&&typeof rdata.data.WorkDirectory === "object"){
+							rdata.Quest = rdata.data;
+							rdata.data = {};
+						}
+					}catch(err){
+						if(/(WorkDirectory)/.test(err.message)){
+							continue;
+						}
+						console.log(err);
+					}
 					continue;
 				}
 			}
