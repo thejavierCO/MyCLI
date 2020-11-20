@@ -1,94 +1,98 @@
-let path = require("path");
-let cmd = require("execa");
-let commands = require("commands");
-let inquirer = require("inquirer");
+const cli = require("../tools/cliCommands");
 
-let file = require("file-maker");
-let fileExist = require("file-exists");
+let MyCli = new cli((a)=>"play");
 
-let setDir = require("make-dir");
-let {dirExists:existdir} = require("dir-exists-safe");
-
-let home = path.resolve("f:","Projects");
-
-let setCapitaleDirectory  = (root,a)=>{
-    let r = a.split("\\");
-        r = (r.slice(r.length-1))[0];
-    let b = (r[0].charAt(0)).toLocaleUpperCase();
-    return path.join(root,b+(r.slice(1)));
-}
-
-let getDirectory = async (dir,message,invert=false)=>await existdir(dir)
-.then(e=>{if(e){return dir;}else{throw dir;}})
-.then(e=>typeof message !== "undefined"&&invert===true?
-    inquirer.prompt({
-        type:"confirm",
-        name:"exist",
-        message
-    }).then(({exist})=>exist?dir:false)
-:e)
-.catch(d=>typeof message !== "undefined"&&invert===false?
-    inquirer.prompt({
-        type:"confirm",
-        name:"make",
-        message
-    }).then(({make})=>make?createDir(d):false)
-:createDir(d))
-.then(e=>{if(e===false){throw {result:e};}else{return e;}})
-
-let createDir = async (e)=>e?setDir(e):false;
-
-let run = async (a)=>{
-    if(!fileExist.sync(path.join(a,"package.json"))){
-        await cmd.command("npm init -y",{
-            stdio:"inherit",
-            cwd:a
-        });
-    }
-    await getDirectory(path.join(a,"src"),"not exist source directory \n your create?");
-    await cmd.command("code "+a);
-}
-
-let setProyect = async (a)=>{
-    await getDirectory(a,"not exist your type directory").then(dir=>
-        inquirer.prompt([{
-            type:"input",
-            name:"project",
-            message:"your name proyect is",
-            validate:a=>a===''?((a)=>{
-                console.log("require name proyect");
-                return a;
-            })(false):true
-        }]).then(({project})=>path.join(dir,project))
-    ).then(e=>getDirectory(e,"exist directory continue",true))
-    .then(e=>run(e))
-    .catch(e=>{
-        let {result} = e;
-        if(result!==false){
-            console.log(e,"ashdiua");
+MyCli.on("new",
+({Quest})=>new Quest("f:/tools"),
+async ({Quest:PT})=>PT.Quest({
+    type:"confirm",
+    name:"realy",
+    message:"Segur@ que quiere crear un nuevo proyecto?",
+    require:(a)=>a==true
+}),
+({Quest:PT})=>PT.Quest({
+    type:"list",
+    name:"type",
+    message:"Que tipo de proyecto quiere crear?",
+    isImportant:true,
+    choices:((a)=>{
+        let list = a.Type.getAll();
+        list.push("(new)");
+        return list;
+    })(PT.WorkDirectory),
+    require:(a)=>/[A-Z]/i.test(a)
+}),
+({data,Quest:PT})=>{
+    let {WorkDirectory,Quest} = PT;
+    try{
+        if(/(new)/i.test(data.type)){
+            return Quest({
+                type:"input",
+                name:"newtype",
+                message:"Que tipo quiere crear?",
+                isImportant:(a)=>{
+                    let types = WorkDirectory.Type.getAll();
+                    types.push("new");
+                    let Its = types.filter(e=>e==a);
+                    if(a.length===0){
+                        console.log([
+                            "\nNo se puede crear un tipo de proyecto vacio"
+                        ].join("\n"))
+                    }else{
+                        if(Its.length===0){
+                            return true;
+                        }else{
+                            console.log([
+                                "\nel tipo: "+a,
+                                "ya existe en la carpeta",
+                                "agregue otro"
+                            ].join("\n"))
+                        }
+                    }
+                    return false;
+                },
+            }).then(e=>WorkDirectory.Type.set(e.newtype))
+        }else{
+            return WorkDirectory.Type.get(data.type);
         }
-    })
-}
-
-if(typeof commands.get("new") !== "string"){
-    inquirer.prompt([
-        {
-            type:"input",
-            name:"Directory",
-            message:"Type Proyect is",
-            validate:a=>a===''?((a)=>{
-                console.log("require type proyect");
-                return a;
-            })(false):true
-        }
-    ])
-    .then(({Directory})=>setCapitaleDirectory(home,Directory))
-    .then(e=>setProyect(e))
-}else if(commands.exists("new")){
-    if(commands.get("new")!==""){
-        let dir = setCapitaleDirectory(home,commands.get("new")); 
-        setProyect(dir)
-    }else{
-        throw "require name type proyect";
+    }catch(err){
+        if(err.error){
+            throw err;
+		}else{
+			throw err;
+		}
     }
-}
+},
+({data,Quest:PT})=>PT.Quest({
+    type:"input",
+    name:"project",
+    message:"Que nombre quiere poner le?",
+    isImportant:(a)=>{
+        let types = data.getAll().map(e=>e.name);
+        types.push("new");
+        let Its = types.filter(e=>e==a);
+        if(a.length===0){
+            console.log([
+                "\nNo se puede crear un proyecto vacio"
+            ].join("\n"))
+        }else{
+            if(Its.length===0){
+                return true;
+            }else{
+                console.log([
+                    "\nel proyect: "+a,
+                    "ya existe en la carpeta",
+                    "agregue otro"
+                ].join("\n"))
+            }
+        }
+        return false;
+    },
+    require:(a)=>/[A-Z]/i.test(a)
+}).then(e=>data.new(e.project)))
+
+MyCli.run().then(e=>{
+    console.log("\n"+"-".repeat(10)+"(end)"+"-".repeat(10)+"\n",e,"\n"+"-".repeat(10)+"(end)"+"-".repeat(10)+"\n")
+}).catch(e=>{
+    console.log("\n"+"-".repeat(10)+"(error)"+"-".repeat(10)+"\n",e,"\n"+"-".repeat(10)+"(error)"+"-".repeat(10)+"\n")
+})
