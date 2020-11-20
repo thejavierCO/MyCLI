@@ -1,5 +1,5 @@
 ## Creacion de un cli para administrar proyectos
----
+
   PT --new // crear nuevo proyecto
   
   PT --del // eliminar el proyecto
