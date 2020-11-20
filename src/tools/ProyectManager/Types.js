@@ -39,7 +39,7 @@ class ProjectType{
             return this.directory.delDirectory(nameType)
         }
     }
-    gets = ()=>this.directory.readDirectory().map(e=>e.name);
+    getAll = ()=>this.directory.readDirectory().map(e=>e.name);
 }
 
 module.exports = ProjectType;

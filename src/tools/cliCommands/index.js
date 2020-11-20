@@ -51,12 +51,42 @@ class cli{
 	}
 	async runFs(fs,data){
 		if(typeof fs === "object"&&fs.length>0){
-			let rdata = {
-				data:undefined,
-				Quest:quest
-			}
+			let rdata = data;
+			let i = 0;
 			for (const element of fs) {
-				console.log(this.isPromise(element))
+				i++;
+				// console.log("Prosicion: "+i,rdata)
+				try{
+					if(this.isPromise(element)){
+						await this.getResultPromise(element,rdata,(a)=>{
+							rdata.data = a;
+						})
+						continue;
+					}else if(this.isFunction(element)){
+						let resData = await element(rdata);
+						if(typeof resData === "object"&&resData.WorkDirectory){
+							rdata.Quest = resData;
+							rdata.data = {
+								response:"is Quest instance"
+							};
+						}else{
+							rdata.data = resData;
+						}
+						continue;
+					}else{
+						throw {message:"not is promise or function"}
+					}
+				}catch(err){
+					console.log(err)
+					rdata = {
+						...err,
+						in:{
+							Prosicion:i,
+							data:rdata
+						}
+					}
+					break;
+				}
 			}
 			return rdata;
 		}else{
@@ -64,7 +94,10 @@ class cli{
 		}
 	}
 	isPromise(element){
-		return /(async)|(promise)/.test(element)
+		return /(async)|(promise)/.test(element);
+	}
+	isFunction(element){
+		return typeof element === "function";
 	}
 	async getResultPromise(fs,arg,f){
 		let returnData = true;
