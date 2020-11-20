@@ -3,7 +3,7 @@ const cli = require("./tools/cliCommands");
 let MyCli = new cli((a)=>"play");
 
 MyCli.on("new",
-({data,Quest})=>new Quest("f:/tools"),
+({Quest})=>new Quest("f:/tools"),
 async ({Quest:PT})=>PT.Quest({
     type:"confirm",
     name:"realy",
@@ -51,25 +51,48 @@ async ({Quest:PT})=>PT.Quest({
                     }
                     return false;
                 },
-            })
+            }).then(e=>WorkDirectory.Type.set(e.newtype))
         }else{
-            return data
+            return WorkDirectory.Type.get(data.type);
         }
     }catch(err){
         if(err.error){
-            console.log(err)
+            throw err;
 		}else{
-			throw err
+			throw err;
 		}
     }
 },
-({data,Quest:PT})=>{
-    console.log(data)
-},
-)
+({data,Quest:PT})=>PT.Quest({
+    type:"input",
+    name:"project",
+    message:"Que nombre quiere poner le?",
+    isImportant:(a)=>{
+        let types = data.getAll().map(e=>e.name);
+        types.push("new");
+        let Its = types.filter(e=>e==a);
+        if(a.length===0){
+            console.log([
+                "\nNo se puede crear un proyecto vacio"
+            ].join("\n"))
+        }else{
+            if(Its.length===0){
+                return true;
+            }else{
+                console.log([
+                    "\nel proyect: "+a,
+                    "ya existe en la carpeta",
+                    "agregue otro"
+                ].join("\n"))
+            }
+        }
+        return false;
+    },
+    require:(a)=>/[A-Z]/i.test(a)
+}).then(e=>data.new(e.project)))
 
 MyCli.run().then(e=>{
     console.log("\n"+"-".repeat(10)+"(end)"+"-".repeat(10)+"\n",e,"\n"+"-".repeat(10)+"(end)"+"-".repeat(10)+"\n")
 }).catch(e=>{
-    console.log("\n"+"-".repeat(10)+"(end)"+"-".repeat(10)+"\n",e,"\n"+"-".repeat(10)+"(end)"+"-".repeat(10)+"\n")
+    console.log("\n"+"-".repeat(10)+"(error)"+"-".repeat(10)+"\n",e,"\n"+"-".repeat(10)+"(error)"+"-".repeat(10)+"\n")
 })
