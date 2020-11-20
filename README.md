@@ -14,14 +14,12 @@ PT --del // eliminar el proyecto
 PT --del -type TEXT //Espesifica el tipo de proyecto
 PT --del -type TEXT -name TEXT //Espesifica el typo y el nombre
 ```
----
 ### abrir
 ```
 PT --open // abrir el proyecto
 PT --open -type TEXT //Espesifica el tipo de proyecto
 PT --open -type TEXT -name TEXT //Espesifica el typo y el nombre
 ```
----
 ### agregar al proyecto
 ```
 PT --add // agregar nuevos modulos si se usa nodejs en el proyecto
