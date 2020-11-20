@@ -1,4 +1,4 @@
-const Directory = require("../DirectoryManager");
+const Directory = require("../fileBrower/DirectoryManager");
 const Project = require("./Projects")
 const ProjectType = require("../ProyectManager/Types");
 
